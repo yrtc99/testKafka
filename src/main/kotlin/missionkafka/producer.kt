@@ -24,6 +24,8 @@ class SimpleProducer(brokers: String) {
     private fun createProducer(brokers: String): Producer<String, Person> {
         val props = Properties()
         props["bootstrap.servers"] = brokers
+
+        //Serialize : 將 Java Object 轉換成 json
         props["key.serializer"] = StringSerializer::class.java
         props["value.serializer"] = PersonSerializer::class.java
         return KafkaProducer<String, Person>(props)
@@ -33,6 +35,7 @@ class SimpleProducer(brokers: String) {
         val waitTimeBetweenIterationsMs = 1000L / ratePerSecond
         logger.info("Producing $ratePerSecond records per second (1 every ${waitTimeBetweenIterationsMs}ms)")
 
+        //generate fake data
         val faker = Faker()
         while (true) {
             val fakePerson = Person(
